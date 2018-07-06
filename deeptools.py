@@ -17,7 +17,7 @@ imgs = []
 avgdirs = []
 k = None
 captures = int(input('How many seconds of capture? '))
-modelname = input('Name to save model? ')
+modelname = input('Name of model? ')
 print('\ncapturing data')
 for i in range(captures*10):
     img, avgdir = ff.getcap()
@@ -37,25 +37,34 @@ print('captured data')
 
 model = alexnet(72, 128, 0.01, 11)
 
-try:
-    model.load('%s.tfl' % modelname)
-except NotFoundError:
+if input('Load pretrained model? ') != 'y':
     # Training
-    model.fit(imgs, avgdirs, n_epoch=100, batch_size=1000, show_metric=True)
+    model.fit(imgs, avgdirs, n_epoch=100, batch_size=100, show_metric=True)
     model.save('%s.tfl' % modelname)
+else:
+    model.load('%s.tfl' % modelname)
 
-start = time.time()
+start = True # time.time()
+pause = False
 
 while True:
-    imgs = []
-    img, avgdir = ff.getcap()
-    imgs.append(img)
-    imgs = np.expand_dims(np.array(imgs), axis=3)#.astype('float32')
-    pred = model.predict(imgs)
-    actpred = (getmaxpos(pred)/10)
-    print(str(actpred))
-    # if time.time()-start < 100:
-    CircleFunc.setmouse(actpred)
+    if not pause:
+        imgs = []
+        img, avgdir = ff.getcap()
+        imgs.append(img)
+        imgs = np.expand_dims(np.array(imgs), axis=3)#.astype('float32')
+        pred = model.predict(imgs)
+        actpred = (getmaxpos(pred)/10)
+        print(str(actpred))
+        # if time.time()-start < 100: 
+        CircleFunc.setmouse(actpred)
+    if keyboard.is_pressed('p'):#if key 'p' is pressed
+        if start == True or time.time()-start > 2.5:
+            start = time.time()
+            pause = not pause
+            if pause:
+                print('paused')
+        
 
 
 
