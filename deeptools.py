@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 import time
 from alexnet import alexnet
+import keyboard
 
 dummy = np.array(pd.get_dummies([0., 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.]))
 
@@ -16,6 +17,7 @@ imgs = []
 avgdirs = []
 k = None
 captures = int(input('How many seconds of capture? '))
+modelname = input('Name to save model? ')
 print('\ncapturing data')
 for i in range(captures*10):
     img, avgdir = ff.getcap()
@@ -35,8 +37,12 @@ print('captured data')
 
 model = alexnet(72, 128, 0.01, 11)
 
-# Training
-model.fit(imgs, avgdirs, n_epoch=100, batch_size=100, show_metric=True)
+try:
+    model.load('%s.tfl' % modelname)
+except NotFoundError:
+    # Training
+    model.fit(imgs, avgdirs, n_epoch=100, batch_size=1000, show_metric=True)
+    model.save('%s.tfl' % modelname)
 
 start = time.time()
 

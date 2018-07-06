@@ -26,7 +26,13 @@ def alexnet(width, height, lr, outputs):
                          loss='categorical_crossentropy',
                          learning_rate=lr, name='targets')
 
+    # tflearn.init_graph(num_cores=4,gpu_memory_fraction=0.5)
+
     model = tflearn.DNN(network, checkpoint_path='model_alexnet',
                         max_checkpoints=1, tensorboard_verbose=2, tensorboard_dir='log')
 
     return model
+
+if __name__ == '__main__':
+    model = alexnet(72, 128, 0.01, 11)
+
