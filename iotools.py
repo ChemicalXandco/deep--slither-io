@@ -52,7 +52,7 @@ class FrameFunc:
         start = time.time()
         
         screencap = sf.get_screen(sf.resRight)
-        if screencap != None:
+        if type(screencap) is sf.np.ndarray:
             cap = cv2.resize(screencap,(128, 72), interpolation = cv2.INTER_LINEAR)
             img = cv2.cvtColor(cap, cv2.COLOR_BGR2GRAY)/255
             # cap = cv2.resize(cap,(1280, 720), interpolation = cv2.INTER_LINEAR)
@@ -68,7 +68,7 @@ class FrameFunc:
         else:
             return None
 
-    def capavailable():
+    def capavailable(self):
         return sf.screenavailable
 
 if __name__ == '__main__':

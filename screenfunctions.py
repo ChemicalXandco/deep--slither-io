@@ -8,6 +8,7 @@ else:
 
 class ScreenFunc:
     def __init__(self):
+        self.np = np
         global resRight
         img = ImageGrab.grab()
         img_np = np.array(img)
