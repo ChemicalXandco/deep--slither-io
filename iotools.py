@@ -68,7 +68,7 @@ class FrameFunc:
         else:
             return None
 
-    def capavailable():
+    def capavailable(self):
         return sf.screenavailable
 
 if __name__ == '__main__':
