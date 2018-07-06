@@ -41,7 +41,7 @@ try:
     model.load('%s.tfl' % modelname)
 except NotFoundError:
     # Training
-    model.fit(imgs, avgdirs, n_epoch=100, batch_size=1000, show_metric=True)
+    model.fit(imgs, avgdirs, n_epoch=100, batch_size=100, show_metric=True)
     model.save('%s.tfl' % modelname)
 
 start = time.time()
