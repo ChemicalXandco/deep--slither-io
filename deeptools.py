@@ -48,7 +48,7 @@ start = True # time.time()
 pause = False
 
 while True:
-    if not pause:
+    if not pause and ff.capavailable():
         imgs = []
         img, avgdir = ff.getcap()
         imgs.append(img)

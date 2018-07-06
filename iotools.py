@@ -50,19 +50,26 @@ class FrameFunc:
 
     def getcap(self, framelen=0.1, capact=True):
         start = time.time()
+        
+        screencap = sf.get_screen(sf.resRight)
+        if screencap != None:
+            cap = cv2.resize(screencap,(128, 72), interpolation = cv2.INTER_LINEAR)
+            img = cv2.cvtColor(cap, cv2.COLOR_BGR2GRAY)/255
+            # cap = cv2.resize(cap,(1280, 720), interpolation = cv2.INTER_LINEAR)
 
-        cap = cv2.resize(sf.get_screen(sf.resRight),(128, 72), interpolation = cv2.INTER_LINEAR)
-        img = cv2.cvtColor(cap, cv2.COLOR_BGR2GRAY)/255
-        # cap = cv2.resize(cap,(1280, 720), interpolation = cv2.INTER_LINEAR)
+            # print(str(time.time()-start))
 
-        # print(str(time.time()-start))
+            avgdir = self.waituntil(start, framelen, capact)
 
-        avgdir = self.waituntil(start, framelen, capact)
+            # print(str(time.time()-start))
+            # print(sorted(img.flatten()))
 
-        # print(str(time.time()-start))
-        # print(sorted(img.flatten()))
+            return (img, avgdir)
+        else:
+            return None
 
-        return (img, avgdir)
+    def capavailable():
+        return sf.screenavailable
 
 if __name__ == '__main__':
     '''

@@ -25,6 +25,7 @@ class ScreenFunc:
         else:
             self.resRight = True
         # resRight = False
+        self.screenavailable = True
 
     def imcrop(self, img, bbox): 
         x1,y1,x2,y2 = bbox
@@ -42,12 +43,21 @@ class ScreenFunc:
         return img, x1, x2, y1, y2
 
     def get_screen(self, resRight):
-        img = ImageGrab.grab()
-        img_np = np.array(img)
-        if resRight == True:
-            return cv2.cvtColor(img_np, cv2.COLOR_BGR2RGB) 
-        else:
-            return cv2.resize((cv2.cvtColor(img_np, cv2.COLOR_BGR2RGB)),(1920, 1080), interpolation = cv2.INTER_LINEAR)
+        try:
+            img = ImageGrab.grab()
+            img_np = np.array(img)
+            if resRight == True:
+                return cv2.cvtColor(img_np, cv2.COLOR_BGR2RGB) 
+            else:
+                return cv2.resize((cv2.cvtColor(img_np, cv2.COLOR_BGR2RGB)),(1920, 1080), interpolation = cv2.INTER_LINEAR)
+            if self.screenavailable == False:
+                self.screenavailable = True
+                print('screen capture regained')
+        except OSError as e:
+            if self.screenavailable == True:
+                self.screenavailable = False
+                print('could not get screenshot - %s' % e)
+            return None
 
 # if __name__ == "__main__":
     # start()
