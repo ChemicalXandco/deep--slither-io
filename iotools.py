@@ -1,4 +1,4 @@
-import screenfunctions, cv2, time, math, pyautogui
+import screenfunctions, cv2, time, math, pyautogui, keyboard
 # import turtletest as tt
 
 sf = screenfunctions.ScreenFunc()
@@ -30,11 +30,16 @@ class FrameFunc:
 
     def waituntil(self, start, length, capact=True):
         rec = []
+        spacepress = []
         while time.time()-start < length:
             # k = cv2.waitKey(10) & 0xff
             if capact:
                 x, y = pyautogui.position()
                 rec.append(CircleFunc.getdir(x, y, 960, 540))
+                if keyboard.is_pressed('space'):
+                    spacepress.append(1)
+                else:
+                    spacepress.append(0)
             else:
                 pass
             '''
@@ -44,7 +49,8 @@ class FrameFunc:
             '''
         if capact:
             recavg = sum(rec)/len(rec)
-            return recavg
+            spacepressavg = round(sum(spacepress)/len(spacepress))
+            return (recavg, spacepressavg)
         else:
             return None
 
@@ -59,12 +65,12 @@ class FrameFunc:
 
             # print(str(time.time()-start))
 
-            avgdir = self.waituntil(start, framelen, capact)
+            avgdir, avgspace = self.waituntil(start, framelen, capact)
 
             # print(str(time.time()-start))
             # print(sorted(img.flatten()))
 
-            return (img, avgdir)
+            return (img, avgdir, avgspace)
         else:
             return None
 

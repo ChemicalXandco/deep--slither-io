@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 
 dummy = np.array(pd.get_dummies([0., 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.]))
+bin_dummy = np.array(pd.get_dummies([0., 1.]))
 
 def getdummy(value):
     if value == 0.:
@@ -26,6 +27,12 @@ def getdummy(value):
         return dummy[9]
     elif value == 1.:
         return dummy[10]
+
+def getbindummy(value):
+    if value == 0.:
+        return bin_dummy[0]
+    elif value == 1.:
+        return bin_dummy[1]
 
 def getmaxpos(matrix):
     maxof = np.amax(matrix)
