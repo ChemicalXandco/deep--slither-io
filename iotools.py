@@ -1,4 +1,5 @@
 import screenfunctions, cv2, time, math, pyautogui, keyboard
+import numpy as np
 # import turtletest as tt
 
 sf = screenfunctions.ScreenFunc()
@@ -27,6 +28,25 @@ class CircleFunc:
 class FrameFunc:
     def __init__(self):
         sf = screenfunctions.ScreenFunc()
+        self.opencv = cv2
+
+    def getopencvformat(self, img):
+        if np.amax(img) <= 1:
+            cvimg = (img*255).astype(np.uint8)
+        else:
+            cvimg = img.astype(np.uint8)
+        return cvimg
+
+    def show(self, img, resize=True, wait=1):
+        cvimg = self.getopencvformat(img)
+        if resize:
+            cv2.imshow('img', cv2.resize(cvimg, (1280, 720), interpolation = cv2.INTER_LINEAR))
+        else:
+            cv2.imshow('img', cvimg)
+        cv2.waitKey(1)
+
+    def close():
+        cv2.destroyAllWindows()
 
     def waituntil(self, start, length, capact=True):
         rec = []
@@ -99,10 +119,13 @@ if __name__ == '__main__':
         
         print(str(diry),str(retco))
     '''
-    # ff = FrameFunc()
-    # cv2.imshow('cap',ff.getcap())
-    # cv2.waitKey(1)
 
+    ff = FrameFunc()
+    while True:
+        cv2.imshow('cap',ff.getcap())
+        cv2.waitKey(1)
+
+    '''
     start = time.time()
 
     rec = []
@@ -119,6 +142,7 @@ if __name__ == '__main__':
             pyautogui.moveTo((retco[0]+960), (retco[1]+540))
     else:
         print('rec too long: '+str(len(rec)))
+    '''
     
 
     

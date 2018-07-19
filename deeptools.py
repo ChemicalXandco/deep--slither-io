@@ -51,6 +51,7 @@ while True:
     if not pause and ff.capavailable():
         imgs = []
         img, avgdir, avgspace = ff.getcap()
+        ff.show(img)
         imgs.append(img)
         imgs = np.expand_dims(np.array(imgs), axis=3)#.astype('float32')
         pred = model.predict(imgs)
