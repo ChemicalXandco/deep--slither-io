@@ -18,8 +18,8 @@ class deeptool:
         k = None
         print('\ncapturing data')
         for i in range(captures*10):
-            img, avgdir, avgspace = self.ff.getcap()
-            imgs.append(img)
+            self.img, avgdir, avgspace = self.ff.getcap()
+            imgs.append(self.img)
             avgdirs.append(avgdir)
             avgspaces.append(avgspace)
         self.imgs = np.expand_dims(np.array(imgs), axis=3)#.astype('float32')
@@ -45,12 +45,13 @@ class deeptool:
         else:
             self.model.load('%s.tfl' % self.modelname)
 
-    def control(self):
+    def control(self, showcv=False):
         if not self.pause and self.ff.capavailable():
             imgs = []
-            img, avgdir, avgspace = self.ff.getcap()
-            self.ff.show(img)
-            imgs.append(img)
+            self.img, avgdir, avgspace = self.ff.getcap()
+            if showcv:
+                self.ff.show(self.img)
+            imgs.append(self.img)
             imgs = np.expand_dims(np.array(imgs), axis=3)#.astype('float32')
             pred = self.model.predict(imgs)
             pred = pred.flatten()
@@ -79,7 +80,7 @@ if __name__ == '__main__':
     load = input('Load pretrained model? ')
     dt.model(load)
     while True:
-        dt.control()
+        dt.control(True)
 
 
 
