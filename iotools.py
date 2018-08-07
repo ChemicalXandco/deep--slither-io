@@ -1,5 +1,4 @@
 import screenfunctions, cv2, time, math, pyautogui, keyboard
-# import turtletest as tt
 
 sf = screenfunctions.ScreenFunc()
 
@@ -29,20 +28,22 @@ class FrameFunc:
         sf = screenfunctions.ScreenFunc()
         self.opencv = cv2
 
-    def getopencvformat(self, img):
+    def getopencvformat(self, img, resize=True, xres=1280, yres=720):
         if sf.np.amax(img) <= 1:
             cvimg = (img*255).astype(sf.np.uint8)
         else:
             cvimg = img.astype(sf.np.uint8)
-        return cvimg
+
+        if resize:
+            return cv2.resize(cvimg, (xres, yres), interpolation = cv2.INTER_LINEAR))
+        else:
+            return cvimg
+        
 
     def show(self, img, resize=True, wait=1):
         cvimg = self.getopencvformat(img)
-        if resize:
-            cv2.imshow('img', cv2.resize(cvimg, (1280, 720), interpolation = cv2.INTER_LINEAR))
-        else:
-            cv2.imshow('img', cvimg)
-        cv2.waitKey(1)
+        
+        cv2.waitKey(wait)
 
     def close():
         cv2.destroyAllWindows()

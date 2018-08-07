@@ -4,7 +4,7 @@ from PIL import ImageTk
 from deeptools import deeptool
 
 root = Tk()
-root.title('IO Bot')
+root.title('.IO Bot')
 # root.iconbitmap('icon.ico')
 
 # Add a grid
