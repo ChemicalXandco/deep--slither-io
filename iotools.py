@@ -20,13 +20,15 @@ class CircleFunc:
         return ((rad*math.sin(actdir)), (rad*math.cos(actdir)))
 
     def setmouse(direction, radius=100):
+        screenmid = [i/2 for i in pyautogui.size()]
         retco = CircleFunc.getcoords(direction, radius)
-        pyautogui.moveTo((retco[0]+960), (retco[1]+540))
+        pyautogui.moveTo((retco[0]+screenmid[0]), (retco[1]+screenmid[0]))
     
 class FrameFunc:
     def __init__(self):
         sf = screenfunctions.ScreenFunc()
         self.opencv = cv2
+        self.screenmid = [i/2 for i in pyautogui.size()]
 
     def getopencvformat(self, img, resize=True, xres=1280, yres=720):
         if sf.np.amax(img) <= 1:
@@ -35,7 +37,7 @@ class FrameFunc:
             cvimg = img.astype(sf.np.uint8)
 
         if resize:
-            return cv2.resize(cvimg, (xres, yres), interpolation = cv2.INTER_LINEAR))
+            return cv2.resize(cvimg, (xres, yres), interpolation = cv2.INTER_LINEAR)
         else:
             return cvimg
         
@@ -55,7 +57,7 @@ class FrameFunc:
             # k = cv2.waitKey(10) & 0xff
             if capact:
                 x, y = pyautogui.position()
-                rec.append(CircleFunc.getdir(x, y, 960, 540))
+                rec.append(CircleFunc.getdir(x, y, self.screenmid[0], self.screenmid[1]))
                 if keyboard.is_pressed('space'):
                     spacepress.append(1)
                 else:
