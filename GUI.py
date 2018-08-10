@@ -8,9 +8,15 @@ import numpy as np
 class dummydt:
     def __init__(self):
         self.notfake = False
+        self.pause = False
+        self.message = "Model not loaded!"
     class ff:
         def getopencvformat():
             print("None of this!")
+    def capdata(self, captures, printit=True, gui=None, root=None):
+        print(self.message)
+    def train(self, n_epochs):
+        print(self.message)
 
 def sep(root, rownum):
     ttk.Separator(root,orient=HORIZONTAL).grid(row=rownum, columnspan=2, pady=10, sticky="ew")
@@ -24,13 +30,19 @@ root.title('.IO Bot')
 load = BooleanVar()
 
 def start():
-    global working
-    working = True
-    dt.pause = False
+    if dt.notfake:
+        global working
+        working = True
+        dt.pause = False
+    else:
+        print(dt.message)
 
 def stop():
-    global working
-    working = False
+    if dt.notfake:
+        global working
+        working = False
+    else:
+        print(dt.message)
 
 def cap(captime, button, root):
     try:
@@ -56,9 +68,13 @@ def loadnet(entry, loadthenet, label=None):
 
 def unloadnet(entry, label=None):
     global dt
+    dt = dummydt()
     entry.config(state='normal')
     if label != None:
         label.config(text="")
+
+pauselab = Label(root, text="Press 'P' to pause bot when running \npress again to unpause")
+pauselab.grid(column=1,row=0)
 
 modnamelab = Label(root, text="Name of model: ")
 modnamelab.grid(column=0,row=1,sticky=E)
@@ -80,32 +96,36 @@ unmodelbut.grid(column=1,row=4,sticky=W)
 
 sep(root, 5)
 
+entrycaplab = Label(root, text="Time to capture: ")
+entrycaplab.grid(column=0,row=6,sticky=E)
+
 entrycap = Entry(root)
-entrycap.grid(column=0,row=6,padx=5,sticky=E)
+entrycap.grid(column=1,row=6,sticky=W)
 
 docap = Button(root, text="Capture data", command=lambda: cap(entrycap.get(), docap, root))
-docap.grid(column=1,row=6,sticky=W)
+docap.grid(column=1,row=7,sticky=W)
 
-sep(root, 7)
+sep(root, 8)
 
-'''
+entrainlab = Label(root, text="How many epochs? (100+ recommended): ")
+entrainlab.grid(column=0,row=9,sticky=E)
 
-trainit = Button(root, text="Train (May take a long time)", command=lambda: dt.train(1))
-trainit.grid(column=1,row=5)
+entrytrain = Entry(root)
+entrytrain.grid(column=1,row=9,sticky=W)
+
+trainit = Button(root, text="Train (May take a long time)", command=lambda: dt.train(entrytrain.get()))
+trainit.grid(column=1,row=10,sticky=W)
+
+sep(root, 11)
 
 run = Button(root, text="Start bot", command=start)
-run.grid(column=1,row=4)
+run.grid(column=1,row=12,sticky=W)
 
 stoprun = Button(root, text="Stop bot", command=stop)
-stoprun.grid(column=1,row=5)
+stoprun.grid(column=1,row=13,sticky=W)
 
-entrycaplab = Label(root, text="Time to capture: ")
-entrycaplab.grid(column=0,row=1)
-
-'''
-
-pauselab = Label(root, text="Press 'P' to pause bot when running \npress again to unpause")
-pauselab.grid(column=1,row=0)
+pauselab = Label(root, text="")
+pauselab.grid(column=0,row=13,sticky=E)
 
 res = (root.winfo_screenwidth(), root.winfo_screenheight())
 
@@ -125,6 +145,11 @@ while True:
         tkscreen = ImageTk.PhotoImage(screen)
         panel.configure(image=tkscreen)
         panel.image = tkscreen
+
+    if dt.pause:
+        panel.config(text="Bot paused ")
+    else:
+        panel.config(text="")
 
     root.update_idletasks()
     root.update()
