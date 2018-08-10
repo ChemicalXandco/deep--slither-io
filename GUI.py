@@ -147,9 +147,9 @@ while True:
         panel.image = tkscreen
 
     if dt.pause:
-        panel.config(text="Bot paused ")
+        pauselab.config(text="Bot paused ")
     else:
-        panel.config(text="")
+        pauselab.config(text="")
 
     root.update_idletasks()
     root.update()
