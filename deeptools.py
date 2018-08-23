@@ -80,7 +80,7 @@ class deeptool:
         elif float(a) != float(n_epoch):
             print("Number of epochs is not int!")
         else:
-            self.model.fit(self.imgs, self.avgdirs, n_epoch, batch_size=100, show_metric=True)
+            self.model.fit(self.imgs, self.avgdirs, a, batch_size=100, show_metric=True)
             self.savemodel()
 
     def savemodel(self):
