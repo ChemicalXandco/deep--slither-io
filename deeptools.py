@@ -77,7 +77,7 @@ class deeptool:
             print(e)
         if self.imgs == [] and self.avgdirs == []:
             print("Can't train on nothing!")
-        elif a != n_epoch:
+        elif float(a) != float(n_epoch):
             print("Number of epochs is not int!")
         else:
             self.model.fit(self.imgs, self.avgdirs, n_epoch, batch_size=100, show_metric=True)
