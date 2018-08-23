@@ -22,7 +22,7 @@ class CircleFunc:
     def setmouse(direction, radius=100):
         screenmid = [i/2 for i in pyautogui.size()]
         retco = CircleFunc.getcoords(direction, radius)
-        pyautogui.moveTo((retco[0]+screenmid[0]), (retco[1]+screenmid[0]))
+        pyautogui.moveTo((retco[0]+screenmid[0]), (retco[1]+screenmid[1]))
     
 class FrameFunc:
     def __init__(self):
