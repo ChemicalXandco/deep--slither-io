@@ -1,4 +1,4 @@
-# deep--slither-io
+# deep-slither-any-io
 deep learning bot designed to play almost any '.io' online game based on the actions of a human player
 
 ![gui](scrnshot.png)
@@ -27,3 +27,6 @@ In order to start the bot, press `Start bot` after this your mouse will be contr
 
 ## Performance
 Depending on your training data, it usually likes to go straight into a big snake in slither. This should be combated by going near big snakes and swerving away. I have observed it boosting in front of another snake, which proves that it has an intellegence of some sort. However, it did not go back and eat the food, which may indicate some problem with the architecture, which btw is probably those pooling layers which stop it from knowing where things are.
+
+## Conclusion
+As it is completly external from your browser, it is not technically cheating because the bot has no advantage over a normal human player, in fact it is probably at a disadvantage.
