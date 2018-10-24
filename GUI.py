@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import ttk
 from PIL import Image
 from PIL import ImageTk
-from deeptools import deeptool
+from deeptools import deeptool, picklewrite, pickleread
 import numpy as np
 
 class dummydt:
@@ -73,6 +73,13 @@ def unloadnet(entry, label=None):
     if label != None:
         label.config(text="")
 
+def savecap():
+    picklewrite(entrycapname.get()+'.dat', [dt.imgs, dt.avgdirs])
+
+def opencap():
+    out = pickleread(entrycapname.get()+'.dat')
+    dt.imgs, dt.avgdirs = out[0], out[1]
+
 pauselab = Label(root, text="Press 'P' to pause bot when running \npress again to unpause")
 pauselab.grid(column=1,row=0)
 
@@ -105,27 +112,45 @@ entrycap.grid(column=1,row=6,sticky=W)
 docap = Button(root, text="Capture data", command=lambda: cap(entrycap.get(), docap, root))
 docap.grid(column=1,row=7,sticky=W)
 
-sep(root, 8)
+entrycapnamelab = Label(root, text="Name of capture file: ")
+entrycapnamelab.grid(column=0,row=8,sticky=E)
 
-entrainlab = Label(root, text="How many epochs? (100+ recommended): ")
-entrainlab.grid(column=0,row=9,sticky=E)
+capnameframe = Frame(root)
+capnameframe.grid(column=1,row=8,sticky=W)
 
-entrytrain = Entry(root)
-entrytrain.grid(column=1,row=9,sticky=W)
+entrycapname = Entry(capnameframe)
+entrycapname.grid(column=0,row=0,sticky=E)
 
-trainit = Button(root, text="Train (May take a long time)", command=lambda: dt.train(entrytrain.get()))
-trainit.grid(column=1,row=10,sticky=W)
+entrycapnamelabext = Label(capnameframe, text=".dat")
+entrycapnamelabext.grid(column=1,row=0,sticky=W)
+
+capbut = Button(root, text="Save captured data", command=savecap)
+capbut.grid(column=1,row=9,sticky=W)
+
+uncapbut = Button(root, text="Open captured data", command=opencap)
+uncapbut.grid(column=1,row=10,sticky=W)
 
 sep(root, 11)
 
+entrainlab = Label(root, text="How many epochs? (100+ recommended): ")
+entrainlab.grid(column=0,row=12,sticky=E)
+
+entrytrain = Entry(root)
+entrytrain.grid(column=1,row=12,sticky=W)
+
+trainit = Button(root, text="Train (May take a long time)", command=lambda: dt.train(entrytrain.get()))
+trainit.grid(column=1,row=13,sticky=W)
+
+sep(root, 14)
+
 run = Button(root, text="Start bot", command=start)
-run.grid(column=1,row=12,sticky=W)
+run.grid(column=1,row=15,sticky=W)
 
 stoprun = Button(root, text="Stop bot", command=stop)
-stoprun.grid(column=1,row=13,sticky=W)
+stoprun.grid(column=1,row=16,sticky=W)
 
 pauselab = Label(root, text="")
-pauselab.grid(column=0,row=13,sticky=E)
+pauselab.grid(column=0,row=15,sticky=E)
 
 res = (root.winfo_screenwidth(), root.winfo_screenheight())
 

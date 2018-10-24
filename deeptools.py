@@ -1,8 +1,20 @@
 from iotools import *
 from dummytools import *
 import numpy as np
-import time, keyboard, pyautogui
+import time, keyboard, pyautogui, pickle
 from alexnet import alexnet
+
+def picklewrite(name, data):
+    file = open(name, 'wb')
+    pickle.dump(data, file)
+    file.close()
+    return True
+
+def pickleread(name):
+    file = open(name, 'rb')
+    data = pickle.load(file)
+    file.close()
+    return data
 
 class deeptool:
     def __init__(self, captures, modelname):
