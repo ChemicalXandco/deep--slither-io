@@ -1,3 +1,5 @@
 **/*.pyc
+log
+checkpoint
 *.tfl.*
 *.dat

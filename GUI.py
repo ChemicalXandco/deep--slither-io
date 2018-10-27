@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import ttk
 from PIL import Image
 from PIL import ImageTk
-from deeptools import deeptool, picklewrite, pickleread
+from deeptools import deeptool, picklewrite, pickleread, time
 import numpy as np
 
 class dummydt:
@@ -23,11 +23,14 @@ def sep(root, rownum):
 
 dt = dummydt()
 working = False
+playing = False
 
 root = Tk()
 root.title('.IO Bot')
+res = (root.winfo_screenwidth(), root.winfo_screenheight())
 # root.iconbitmap('icon.ico')
 load = BooleanVar()
+timelinepos = IntVar()
 
 def start():
     if dt.notfake:
@@ -40,17 +43,28 @@ def start():
 def stop():
     if dt.notfake:
         global working
+        global playing
         working = False
+        playing = False
+        
     else:
         print(dt.message)
 
-def cap(captime, button, root):
+def play():
+    if dt.notfake:
+        global playing
+        playing = True
+    else:
+        print(dt.message)
+
+def cap(captime, button, scale, root):
     try:
         timetocap = int(captime)
     except Exception as e:
         print(e)
         return
     dt.capdata(timetocap, False, button, root)
+    scale.config(to=timetocap)
     button.config(text="Capture data")
     root.update_idletasks()
 
@@ -79,9 +93,7 @@ def savecap():
 def opencap():
     out = pickleread(entrycapname.get()+'.dat')
     dt.imgs, dt.avgdirs = out[0], out[1]
-
-pauselab = Label(root, text="Press 'P' to pause bot when running \npress again to unpause")
-pauselab.grid(column=1,row=0)
+    timeline.config(to=dt.imgs.shape[0])
 
 modnamelab = Label(root, text="Name of model: ")
 modnamelab.grid(column=0,row=1,sticky=E)
@@ -109,7 +121,7 @@ entrycaplab.grid(column=0,row=6,sticky=E)
 entrycap = Entry(root)
 entrycap.grid(column=1,row=6,sticky=W)
 
-docap = Button(root, text="Capture data", command=lambda: cap(entrycap.get(), docap, root))
+docap = Button(root, text="Capture data", command=lambda: cap(entrycap.get(), docap, timeline, root))
 docap.grid(column=1,row=7,sticky=W)
 
 entrycapnamelab = Label(root, text="Name of capture file: ")
@@ -130,29 +142,45 @@ capbut.grid(column=1,row=9,sticky=W)
 uncapbut = Button(root, text="Open captured data", command=opencap)
 uncapbut.grid(column=1,row=10,sticky=W)
 
-sep(root, 11)
+timelineframe = Frame(root)
+timelineframe.grid(column=0,row=11,columnspan=2)
+
+timeline = Scale(timelineframe, variable=timelinepos, from_=1, to=1, length=(res[0]/4)+100, orient=HORIZONTAL)
+timeline.grid(column=1,row=0)
+
+playicon = PhotoImage(file="assets/play.png")
+pauseicon = PhotoImage(file="assets/pause.png")
+
+playbut = Button(timelineframe, image=playicon, width="25", height="25", command=play)
+pausebut = Button(timelineframe, image=pauseicon, width="25", height="25", command=stop)
+
+playbut.grid(column=2,row=0)
+pausebut.grid(column=3,row=0)
+
+sep(root, 12)
 
 entrainlab = Label(root, text="How many epochs? (100+ recommended): ")
-entrainlab.grid(column=0,row=12,sticky=E)
+entrainlab.grid(column=0,row=13,sticky=E)
 
 entrytrain = Entry(root)
-entrytrain.grid(column=1,row=12,sticky=W)
+entrytrain.grid(column=1,row=13,sticky=W)
 
 trainit = Button(root, text="Train (May take a long time)", command=lambda: dt.train(entrytrain.get()))
-trainit.grid(column=1,row=13,sticky=W)
+trainit.grid(column=1,row=14,sticky=W)
 
-sep(root, 14)
+sep(root, 15)
 
 run = Button(root, text="Start bot", command=start)
-run.grid(column=1,row=15,sticky=W)
+run.grid(column=1,row=16,sticky=W)
 
 stoprun = Button(root, text="Stop bot", command=stop)
-stoprun.grid(column=1,row=16,sticky=W)
+stoprun.grid(column=1,row=17,sticky=W)
 
 pauselab = Label(root, text="")
-pauselab.grid(column=0,row=15,sticky=E)
+pauselab.grid(column=0,row=16,sticky=E)
 
-res = (root.winfo_screenwidth(), root.winfo_screenheight())
+pauseguide = Label(root, text="Press 'P' to pause bot when running press again to unpause")
+pauseguide.grid(column=0,row=17,sticky=E)
 
 black = np.zeros((int(res[1]/4), int(res[0]/4), 3))
 
@@ -162,14 +190,26 @@ panel = Label(image=tkscreen)
 panel.image = tkscreen
 panel.grid(column=0,row=0)
 
+def setpreview(img, panel):
+    screen = Image.fromarray(dt.ff.getopencvformat(img, True, int(res[0]/4), int(res[1]/4)))
+    tkscreen = ImageTk.PhotoImage(screen)
+    panel.configure(image=tkscreen)
+    panel.image = tkscreen
+
 while True:
     if working and dt.notfake:
         dt.control()
+        setpreview(dt.img, panel)
 
-        screen = Image.fromarray(dt.ff.getopencvformat(dt.img, True, int(res[0]/4), int(res[1]/4)))
-        tkscreen = ImageTk.PhotoImage(screen)
-        panel.configure(image=tkscreen)
-        panel.image = tkscreen
+    if playing:
+        currentframe = timelinepos.get()
+        setpreview(dt.imgs[currentframe-1], panel)
+        time.sleep(0.1)
+        if currentframe != timeline.cget('to'):
+            timelinepos.set(currentframe+1)
+        else:
+            playing = False
+        working = False
 
     if dt.pause:
         pauselab.config(text="Bot paused ")

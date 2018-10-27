@@ -1,7 +1,7 @@
 # deep-slither-any-io
 deep learning bot designed to play almost any '.io' online game based on the actions of a human player
 
-![gui](scrnshot.png)
+![gui](assets/scrnshot.png)
 
 ## How to install
 clone the repo and run `GUI.py`
