@@ -64,7 +64,7 @@ def cap(captime, button, scale, root):
         print(e)
         return
     dt.capdata(timetocap, False, button, root)
-    scale.config(to=timetocap)
+    scale.config(to=timetocap*10)
     button.config(text="Capture data")
     root.update_idletasks()
 
