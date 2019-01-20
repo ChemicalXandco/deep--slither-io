@@ -70,8 +70,14 @@ class FrameFunc:
                 break
             '''
         if capact:
-            recavg = sum(rec)/len(rec)
-            spacepressavg = round(sum(spacepress)/len(spacepress))
+            try:
+                recavg = sum(rec)/len(rec)
+            except ZeroDivisionError:
+                recavg = 0
+            try:
+                spacepressavg = round(sum(spacepress)/len(spacepress))
+            except ZeroDivisionError:
+                spacepressavg = 0
             return (recavg, spacepressavg)
         else:
             return None

@@ -98,8 +98,14 @@ def opencap():
 modnamelab = Label(root, text="Name of model: ")
 modnamelab.grid(column=0,row=1,sticky=E)
 
-modnament = Entry(root)
-modnament.grid(column=1,row=1,sticky=W)
+modnameframe = Frame(root)
+modnameframe.grid(column=1,row=1,sticky=W)
+
+modnament = Entry(modnameframe)
+modnament.grid(column=0,row=0,sticky=E)
+
+modnamelabext = Label(modnameframe, text=".tfl")
+modnamelabext.grid(column=1,row=0,sticky=W)
 
 loadit = Checkbutton(root, text="Load from file? ", variable=load, onvalue=True, offvalue=False)
 loadit.grid(column=1,row=2,sticky=W)
