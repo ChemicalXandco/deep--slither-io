@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import ttk
 from PIL import Image
 from PIL import ImageTk
-from deeptools import deeptool, picklewrite, pickleread, time
+from deeptools import deeptool, picklewrite, pickleread, time, getmaxpos, CircleFunc
 import numpy as np
 
 class dummydt:
@@ -13,6 +13,7 @@ class dummydt:
     class ff:
         def getopencvformat():
             print("None of this!")
+        opencv = None
     def capdata(self, captures, printit=True, gui=None, root=None):
         print(self.message)
     def train(self, n_epochs):
@@ -196,8 +197,43 @@ panel = Label(image=tkscreen)
 panel.image = tkscreen
 panel.grid(column=0,row=0)
 
-def setpreview(img, panel):
-    screen = Image.fromarray(dt.ff.getopencvformat(img, True, int(res[0]/4), int(res[1]/4)))
+def rendercircle(angle):
+    size = 150
+    halfsize = int(size/2)
+    
+    img = np.zeros((size, size, 3)).astype(np.uint8)
+    if dt.ff.opencv != None:
+        img = dt.ff.opencv.circle(img, (halfsize,halfsize), halfsize-5, (0,0,255), -1)
+        img = dt.ff.opencv.circle(img, (halfsize,halfsize), halfsize-10, (0,0,0), -1)
+        dircoords = CircleFunc.getcoords(angle, halfsize-7.5)
+        img = dt.ff.opencv.line(img,(halfsize,halfsize),(int(dircoords[0]+halfsize),int(dircoords[1]+halfsize)),(255,255,255),5)
+        return img
+    else:
+        if angle == None:
+            return size
+        else:
+            print(dt.message)
+        
+sideframe = Frame(root)
+sideframe.grid(column=1,row=0)
+
+black2 = np.zeros((rendercircle(None), rendercircle(None), 3))
+screen2 = Image.fromarray(black2.astype(np.uint8))
+tkscreen2 = ImageTk.PhotoImage(screen2)
+panel2 = Label(sideframe, image=tkscreen2)
+panel2.image = tkscreen2
+panel2.grid(column=0,row=0)
+
+spacenamelab = Label(sideframe, text="Space pressed:")
+spacenamelab.grid(column=0,row=1)
+
+spacelab = Label(sideframe, text="0")
+spacelab.grid(column=0,row=2)
+
+def setpreview(img, panel, normalized=True):
+    if normalized:
+        img = dt.ff.getopencvformat(img, True, int(res[0]/4), int(res[1]/4))
+    screen = Image.fromarray(img)
     tkscreen = ImageTk.PhotoImage(screen)
     panel.configure(image=tkscreen)
     panel.image = tkscreen
@@ -209,7 +245,11 @@ while True:
 
     if playing:
         currentframe = timelinepos.get()
+        code = dt.avgdirs[currentframe-1]
+        code1, code2 = code[:11], code[12] 
         setpreview(dt.imgs[currentframe-1], panel)
+        setpreview(rendercircle(getmaxpos(code1)/10), panel2, False)
+        spacelab.config(text=str(code2))
         time.sleep(0.1)
         if currentframe != timeline.cget('to'):
             timelinepos.set(currentframe+1)
