@@ -1,0 +1,7 @@
+tflearn
+numpy
+Pillow
+opencv-python
+pandas
+pyautogui
+keyboard
