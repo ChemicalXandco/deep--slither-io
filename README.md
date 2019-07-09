@@ -4,7 +4,10 @@ deep learning bot designed to play almost any '.io' online game based on the act
 ![gui](assets/scrnshot.png)
 
 ## How to install
-clone the repo and run `GUI.py`
+- [Install tensorflow with pip](https://www.tensorflow.org/install/pip)
+- run `pip3 install -r requirements.txt`
+- if you are on Linux, [install pyscreenshot with pip](https://pypi.org/project/pyscreenshot/)
+- run `GUI.py` to use the program
 
 # How to use
 ## Geting weights
