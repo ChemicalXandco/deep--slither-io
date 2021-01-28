@@ -1,6 +1,8 @@
 # deep-slither-any-io
 deep learning bot designed to play almost any '.io' online game based on the actions of a human player
 
+# no longer maintained, use at your own risk
+
 ![gui](assets/scrnshot.png)
 
 ## How to install
@@ -18,7 +20,7 @@ In order to train our model, we first need to collect data to train it on. Durin
 
 1. Mouse direction relative to the centre of the screen
 2. Space key is down or not - most of these .io online games have an extra function other then 1. (silther - boost, brutal - detach flail, etc). These are usually done by mouse click, but tracking these requires more code and that is not the aim, so most games will also accept space instead so it should be fine.
-3. What is displayed - this is resized down to 1280x72 and is recorded on your main monitor if you have multiple monitors. It is recommended that you put your browser in full screen mode (F11)
+3. What is displayed - this is resized down to 128x72 and is recorded on your main monitor if you have multiple monitors. It is recommended that you put your browser in full screen mode (F11)
 
 You must specify the amount of time to capture in seconds. Before the actual capture starts, there is a 10-second countdown to give the user enough time to get the game ready. Press `Capture data` to start the countdown, then you must play the game to the best of your ability and making sure to **use space bar instead of mouse click**. Once the capturing has finished, all the data will be written to some variables and capturing again will overwrite all of the previous data.
 ## Training
